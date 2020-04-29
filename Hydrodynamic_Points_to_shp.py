@@ -27,7 +27,8 @@ else:
 fn_files = 'Paper/Paper5/Hydrodynamic_runs/TELEMAC3d'
 fn = os.path.join(fn_trunk,fn_files)
 
-os.chdir(os.path.join(fn_trunk,fn_files))
+#Changing the working directory to the location you specify
+os.chdir(fn)
 #%%
 all_files = glob.glob(os.path.join(fn,'*.csv'))
 
