@@ -49,7 +49,7 @@ for file in all_files:
     pts_shp.crs = prj_file.crs
     
     #convert_crs
-    pts_shp.to_crs(epsg=4326)
+    pts_shp.to_crs(epsg=4326, inplace = True)
     
     #Export points
     pts_shp.to_file(os.path.join(fn,fn_name+'.shp'), driver='ESRI Shapefile')
