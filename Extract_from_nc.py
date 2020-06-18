@@ -78,12 +78,26 @@ extreme = correct_data.where(correct_data['pr']>= threshold)
 
 sum_month_year = extreme['pr'].groupby([extreme.index.year, extreme.index.month]).agg('count')
 
+#%%
+fn = r'E:\surfdrive\Documents\Master2020\Marike\r50_observed_label.csv'
+data = pd.read_csv(fn)
 
+data_new = pd.DataFrame(index=np.arange(data['year'].min(), data['year'].max()+1,1),
+                        columns = np.arange(data['month'].min(), data['month'].max()+1,1))
 
+for row in data_new.index:
+    for col in data_new.columns:
+        print(row,col)
+        data_new.loc[row,col] = np.float(data[((data.loc[:,'year']==row) & (data.loc[:,'month']== col))]['pr'])
+ 
+season1 = np.arange(1,5,1)
+season2 = np.arange(4,9,1)
 
+sel1 = data_new.loc[:, season1]
+sel1['avg_season'] = sel1.mean(axis = 1)
+sel1['sum_season'] = sel1.loc[:,season1].sum(axis = 1)
 
-
-
+sel1.mean()
 
 
 
