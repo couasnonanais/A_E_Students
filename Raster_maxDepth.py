@@ -10,7 +10,7 @@ import geopandas as gpd
 
 #%% Setting the files and folder correctly
 fn_trunk = 'E:/surfdrive/Documents'    
-fn_files = 'Paper/Paper5/Hydrodynamic_runs/TELEMAC3d'
+fn_files = 'Paper/Paper5/Hydrodynamic_runs/TELEMAC3d/max_telemac'
 fn = os.path.join(fn_trunk,fn_files)
 
 os.chdir(os.path.join(fn_trunk,fn_files))
@@ -22,7 +22,8 @@ for file in all_files:
     print(file) 
     fn_name = os.path.split(file)[-1].split('.shp')[0]    
 #    os.system("gdal_grid -zfield value -a invdist:power=10.0:smoothing=1.0 -outsize 400.0 400.0 -ot Float64 -of GTiff -l {} {}.shp {}.tiff --config GDAL_NUM_THREADS ALL_CPUS".format(fn_name,fn_name, fn_name))
-    os.system("gdal_grid -zfield value -a linear:radius=1 -outsize 400.0 400.0 -ot Float64 -of GTiff -l {} {}.shp {}.tiff --config GDAL_NUM_THREADS ALL_CPUS".format(fn_name,fn_name, fn_name+'_linear'))
+#    os.system("gdal_grid -zfield H -a linear:radius=1 -outsize 8000.0 8000.0 -ot Float64 -of GTiff -l {} {}.shp {}.tiff --config GDAL_NUM_THREADS ALL_CPUS".format(fn_name,fn_name, fn_name+'_linear'))
+    os.system("gdal_grid -zfield H -a linear:radius=0 -outsize 8000.0 8000.0 -ot Float64 -of GTiff -l {} {}.shp {}.tiff --config GDAL_NUM_THREADS ALL_CPUS".format(fn_name,fn_name, fn_name+'_linear'))
 
 #%% We clip with the the tiff file - option A USING GDAL
 
