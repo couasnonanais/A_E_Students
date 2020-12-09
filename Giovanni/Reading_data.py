@@ -27,6 +27,14 @@ data['duration'] = data['end_date'] - data['start_date']
 
 #data.loc[:,'Disaster Type'].unique() #To check the unique values
 
-#%%
+#%% Example snippet of creating a list of dates
 
-#Do you see this change?
+final = pd.DataFrame()
+#We create one row per day
+for index in haz.index:
+    print(index)
+    begdate = haz.loc[index,'beg_date'] #Extract beginning date
+    enddate = haz.loc[index,'end_date']  #Extract end date
+    event_days = pd.DataFrame(pd.date_range(start = begdate, end = enddate, freq = 'D', tz='UTC', name = 'date')) #create a dataframe with daily time step for the length of the event
+    event_days["ID"] = np.ones(event_days.shape[0])*int(index) #Storing the ID of the event
+    final = pd.concat([final, event_days], axis = 0) #This will resut in a dataframe with as index the consecutive days where an event happened
