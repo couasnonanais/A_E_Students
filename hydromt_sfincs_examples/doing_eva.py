@@ -25,8 +25,8 @@ da_coast.to_netcdf('./boundary_conditions/ts_discharge.nc') #Path to where you w
 figure_plotting = True #To show the figures and enter in the if functions
 
 #Open your data
-da_q = xr.open_dataarray('./boundary_conditions/ts_discharge.nc', chunks={"time": -1}) #Replace this with your dataset
-ds_bm = eva.eva_block_maxima(da_q, min_dist=14).load() #We extract the maxima over a certain period: by default a year
+da_q = xr.open_dataarray('./boundary_conditions/ts_discharge.nc', chunks={"time": -1}).load() #Replace this with your dataset
+ds_bm = eva.eva_block_maxima(da_q, min_dist=14).load() #We extract the maxima over a certain period: by default a year. Peaks are independent if they are separated by at least 14 days
 
 if figure_plotting == True:
     for i in np.arange(1, len(da_q.index.values)+1):
@@ -56,6 +56,7 @@ da_hydrograph0 = eva.get_peak_hydrographs(
     wdw_size=21,
     n_peaks=20,
 )
+
 da_hydrograph = da_hydrograph0.mean("peak")
 da_hydrograph['time'].attrs.update(unit='days')
 
@@ -72,8 +73,7 @@ if figure_plotting == True:
 #%% We do the Extreme Value Analysis anc combine with the shape of the hydrograph
 
 #We calculate the mean discharge and save this >> depending on the variable you might want this or not!
-m = da_q['time'].dt.month
-da_q_rp0 = da_q.isel(time=np.logical_or(m>=10, m<=9)).mean('time').expand_dims('rps')  #Note that the mean is calculated of hydrological years. You can change this depending on your case study
+da_q_rp0 = da_q.mean('time').expand_dims('rps')  #We calculate the  mean yearly value
 da_q_rp0['rps'] = xr.IndexVariable('rps', [0])
 da_q_rp0 = da_q_rp0.reset_coords(drop=True).compute()
 
@@ -85,3 +85,11 @@ da_events.name = 'events'
 
 #We save the results
 da_events.to_netcdf('./boundary_conditions/fluvial_design_events.nc')
+
+if figure_plotting == True:
+    for i in np.arange(1, len(da_events.index.values)+1):
+        fig, ax = plt.subplots(1,1, figsize=(8,5))
+        da_events.sel(index=i).plot.line(x='time', lw=0.5)
+        ax.set_ylabel('Discharge [m3/s]')
+        ax.set_xlabel('time to peak [days]')
+        ax.set_title(f'Return values - River {[i]}')
