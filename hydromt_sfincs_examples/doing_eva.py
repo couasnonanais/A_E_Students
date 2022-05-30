@@ -64,7 +64,7 @@ if figure_plotting == True:
     for i in np.arange(1, len(da_q.index.values)+1):
         fig, ax = plt.subplots(1,1, figsize=(8,5))
         da_hydrograph0.sel(index=i).plot.line(x='time', color='gray', lw=0.5, add_legend=False)
-        da_hydrograph.sel(index=i).plot.line(x='time', color='red', lw=1.5, )
+        da_hydrograph.sel(index=i).plot.line(x='time', color='red', lw=1.5)
         ax.set_ylabel('normalized discharge [-]')
         ax.set_xlabel('time to peak [days]')
         ax.set_title(f'Normalized peak hydrograph - River {[i]}')
